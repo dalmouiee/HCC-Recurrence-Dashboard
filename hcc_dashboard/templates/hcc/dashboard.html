@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{%load plotly_dash%}
+
+{% block head %}
+<title>HCC Dashboard</title>
+{% plotly_header %}
+{% endblock %}
+
+{% block content %}
+{%plotly_direct name="HccDashboard"%}
+{% plotly_footer %}
+{% endblock %}
