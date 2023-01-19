@@ -6,6 +6,8 @@ import dash_bootstrap_components as dbc
 from .utils.reproduce_best_model import pipeline
 from .components.banner import first_card, second_card
 
+from .components.filters import filter_card
+
 app = DjangoDash(
     "HccDashboard", add_bootstrap_links=True, external_stylesheets=[dbc.themes.QUARTZ]
 )
@@ -30,6 +32,8 @@ app.layout = html.Div(
         ),
         html.Br(),
         dbc.Button("Predict HCC Recurrence", id="predict-btn"),
+        html.Br(),
+        filter_card,
     ]
 )
 
