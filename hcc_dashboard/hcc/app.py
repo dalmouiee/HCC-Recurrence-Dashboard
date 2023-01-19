@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 
 from .utils.reproduce_best_model import pipeline
 from .components.banner import first_card, second_card
+from .components.scatter import generate_scatter_plot
 
 app = DjangoDash(
     "HccDashboard", add_bootstrap_links=True, external_stylesheets=[dbc.themes.QUARTZ]
@@ -22,7 +23,9 @@ app.layout = html.Div(
                             dbc.Col(second_card, width=6),
                         ],
                         style={"width": "100%", "margin": "auto"},
-                    )
+                    ),
+                    html.Br(),
+                    dbc.Row([dcc.Graph(figure=generate_scatter_plot())]),
                 ],
                 id="predict-output",
             ),
