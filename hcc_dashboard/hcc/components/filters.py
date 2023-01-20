@@ -1,5 +1,5 @@
 from dash import html
-import dash_bootstrap_components as dbc   
+import dash_bootstrap_components as dbc
 
 filter_card = html.Div([
     dbc.Card(

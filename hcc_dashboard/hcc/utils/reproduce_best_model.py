@@ -125,14 +125,22 @@ def set_model_weights(model):
     return model
 
 
-def predict(model):
-    result = model.predict(
-        [[0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]]
-    )
+def predict(model, inputs):
+
+    test_pat = [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+
+    for idx in range(len(inputs)):
+        test_pat[idx] = inputs[idx]
+
+    # print(test_pat)
+    # test_pat = [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+    # print(test_pat)
+
+    result = model.predict([test_pat])
     return result.tolist()
 
 
-def pipeline():
+def pipeline(inputs):
     model = create_model_arch()
     model = set_model_weights(model)
-    return predict(model)
+    return predict(model, inputs)
