@@ -11,10 +11,14 @@ COLS_TO_DROP = [
     "DaysToRecurrence",
 ]
 
-TEST_PAT = [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 
+def generate_cosine_sim(inputs):
 
-def generate_cosine_sim(test_pat):
+    test_pat = [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+
+    for idx in range(len(inputs)):
+        test_pat[idx] = inputs[idx]
+
     df = pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
@@ -26,13 +30,13 @@ def generate_cosine_sim(test_pat):
     df_cos_sim.patient_id = df_cos_sim.patient_id.astype(int)
     df_cos_sim.cosine_sim = df_cos_sim.cosine_sim.astype(float)
     df_cos_sim = df_cos_sim.reset_index()
-    df_cos_sim = df_cos_sim[df_cos_sim["cosine_sim"].astype(float) > 0.6]
+    df_cos_sim = df_cos_sim[df_cos_sim["cosine_sim"].astype(float) > 0.75]
     return df_cos_sim
 
 
-def generate_scatter_plot():
+def generate_scatter_plot(inputs):
     df_pats = pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
-    df_cos_sim = generate_cosine_sim(TEST_PAT)
+    df_cos_sim = generate_cosine_sim(inputs)
 
     fig = px.scatter(
         df_cos_sim,
@@ -44,6 +48,8 @@ def generate_scatter_plot():
         # color_discrete_sequence=color_map,
     )
 
+    fig = fig.update_yaxes(visible=False, showticklabels=False)
+
     fig.update_traces(
         marker=dict(size=12),
         # line=dict(width=2,
@@ -51,13 +57,3 @@ def generate_scatter_plot():
         # selector=dict(mode='markers')
     )
     return fig
-
-
-# fig = px.scatter(
-#     df,
-#     x=y_label,
-#     y="Approved Date",
-#     color="DeID Doc",
-#     size="No. of Px",
-#     # color_discrete_sequence=color_map,
-# )
