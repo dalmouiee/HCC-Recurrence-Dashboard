@@ -8,74 +8,68 @@ filter_card = html.Div([
             dbc.Row([
                 dbc.Col([
                     dbc.Label("Satellite"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="satellite_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-satellite-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("Lymphovascular invasion"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="lympho_vasc_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-lympho_vasc-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("Cirrhosis"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="cirr_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-cirr-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("DM"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="dm_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-dm-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("IHD"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="ihd_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-ihd-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("Prior TACE"), 
-                    dbc.Checklist(
+                    dbc.RadioItems(
                     options=[
-                        {"value": 1},
+                        {"label": "Yes", "value": 0},
+                        {"label": "No", "value": 1},
                     ],
                     value=1,
-                    id="pr_tace_switches",
-                    switch=True,
-                    inline=True,
+                    id="radioitems-pr_tace-input",
                     ),
                 ]),
             ]),
@@ -86,8 +80,8 @@ filter_card = html.Div([
                     dbc.Label("Age"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">=65", "value": 1},
-                        {"label": "<65", "value": 2},
+                        {"label": ">=65", "value": 0},
+                        {"label": "<65", "value": 1},
                     ],
                     value=1,
                     id="radioitems-age-input",
@@ -97,9 +91,9 @@ filter_card = html.Div([
                     dbc.Label("Ethnicity"),
                     dbc.RadioItems(
                     options=[
-                        {"label": "Asian", "value": 1},
-                        {"label": "Caucasian", "value": 2},
-                        {"label": "Others", "value": 3},
+                        {"label": "Asian", "value": 0},
+                        {"label": "Caucasian", "value": 1},
+                        {"label": "Others", "value": 2},
                     ],
                     value=1,
                     id="radioitems-ethnicity-input",
@@ -109,8 +103,8 @@ filter_card = html.Div([
                     dbc.Label("BMI"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">=25", "value": 1},
-                        {"label": "<25", "value": 2},
+                        {"label": ">=25", "value": 0},
+                        {"label": "<25", "value": 1},
                     ],
                     value=1,
                     id="radioitems-BMI-input",
@@ -120,8 +114,8 @@ filter_card = html.Div([
                     dbc.Label("Sex"),
                     dbc.RadioItems(
                     options=[
-                        {"label": "Male", "value": 1},
-                        {"label": "Female", "value": 2},
+                        {"label": "Male", "value": 0},
+                        {"label": "Female", "value": 1},
                     ],
                     value=1,
                     id="radioitems-sex-input",
@@ -131,11 +125,11 @@ filter_card = html.Div([
                     dbc.Label("Liver Disease"),
                     dbc.RadioItems(
                     options=[
-                        {"label": "NAFLD", "value": 1},
-                        {"label": "Hep B", "value": 2},
-                        {"label": "Hep c", "value": 3},
-                        {"label": "Alcohol", "value": 4},
-                        {"label": "Others", "value": 5},
+                        {"label": "NAFLD", "value": 0},
+                        {"label": "Hep B", "value": 1},
+                        {"label": "Hep c", "value": 2},
+                        {"label": "Alcohol", "value": 3},
+                        {"label": "Others", "value": 4},
                     ],
                     value=3,
                     id="radioitems-liver-disease-input",
@@ -145,19 +139,19 @@ filter_card = html.Div([
                     dbc.Label("No Lesions"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">1", "value": 1},
-                        {"label": "<=1", "value": 2},
+                        {"label": ">1", "value": 0},
+                        {"label": "<=1", "value": 1},
                     ],
                     value=1,
-                    id="radioitems-sex-input",
+                    id="radioitems-lesions-input",
                     ),
                 ]),
                 dbc.Col([
                     dbc.Label("INR"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">1.1", "value": 1},
-                        {"label": "<=1.1", "value": 2},
+                        {"label": ">1.1", "value": 0},
+                        {"label": "<=1.1", "value": 1},
                     ],
                     value=1,
                     id="radioitems-inr-input",
@@ -171,10 +165,10 @@ filter_card = html.Div([
                     dbc.Label("Albumin"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">=35", "value": 1},
-                        {"label": "<35", "value": 2},
+                        {"label": ">=35", "value": 0},
+                        {"label": "<35", "value": 1},
                     ],
-                    value=2,
+                    value=1,
                     id="radioitems-albumin-input",
                     ),
                 ]), 
@@ -182,9 +176,9 @@ filter_card = html.Div([
                     dbc.Label("AFP"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">100", "value": 1},
-                        {"label": ">8 & <=100", "value": 2},
-                        {"label": "<=8", "value": 3},
+                        {"label": ">100", "value": 0},
+                        {"label": ">8 & <=100", "value": 1},
+                        {"label": "<=8", "value": 2},
                     ],
                     value=2,
                     id="radioitems-afp-input",
@@ -194,10 +188,10 @@ filter_card = html.Div([
                     dbc.Label("HPVG"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">5", "value": 1},
-                        {"label": "<=5", "value": 2},
+                        {"label": ">5", "value": 0},
+                        {"label": "<=5", "value": 1},
                     ],
-                    value=2,
+                    value=1,
                     id="radioitems-hpvg-input",
                     ),
                 ]),
@@ -205,8 +199,8 @@ filter_card = html.Div([
                     dbc.Label("ALT"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">50", "value": 1},
-                        {"label": "<=50", "value": 2},
+                        {"label": ">50", "value": 0},
+                        {"label": "<=50", "value": 1},
                     ],
                     value=1,
                     id="radioitems-alt-input",
@@ -216,8 +210,8 @@ filter_card = html.Div([
                     dbc.Label("eGFR"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">=90", "value": 1},
-                        {"label": "<90", "value": 2},
+                        {"label": ">=90", "value": 0},
+                        {"label": "<90", "value": 1},
                     ],
                     value=1,
                     id="radioitems-egfr-input",
@@ -227,8 +221,8 @@ filter_card = html.Div([
                     dbc.Label("Bilirubin"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">20", "value": 1},
-                        {"label": "<=20", "value": 2},
+                        {"label": ">20", "value": 0},
+                        {"label": "<=20", "value": 1},
                     ],
                     value=1,
                     id="radioitems-bilirubin-input",
@@ -238,8 +232,8 @@ filter_card = html.Div([
                     dbc.Label("Size of Lesion (cm)"),
                     dbc.RadioItems(
                     options=[
-                        {"label": ">=5", "value": 1},
-                        {"label": "<5", "value": 2},
+                        {"label": ">=5", "value": 0},
+                        {"label": "<5", "value": 1},
                     ],
                     value=1,
                     id="radioitems-lesion_size-input",
@@ -249,8 +243,8 @@ filter_card = html.Div([
         ]), 
         ],
         style={
-            "margin-left": "3%",
-            "margin-right": "3%",
+            #"margin-left": "3%",
+            #"margin-right": "3%",
             "background": "transparent"
         },
     ), 
