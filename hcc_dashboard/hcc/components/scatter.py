@@ -1,3 +1,6 @@
+"""
+    Module to handle the scatter plot similarity scores graph
+"""
 from numpy import dot
 from numpy.linalg import norm
 import pandas as pd
@@ -13,8 +16,20 @@ COLS_TO_DROP = [
 
 
 def generate_cosine_sim(inputs):
+    """Function to generate the Cosine Similarity scores between the
+        inference point and machine learning model's training samples
+        that are greater or equal to 75%
 
-    df = pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
+    Args:
+        inputs (list): inference point features
+
+    Returns:
+        pd.DataFrame: dataframe of the similarity scores greater than 75%
+    """
+
+    df = (  # pylint: disable=invalid-name
+        pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
+    )
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
     for col in df.columns:
@@ -30,25 +45,25 @@ def generate_cosine_sim(inputs):
 
 
 def generate_scatter_plot(inputs):
-    df_pats = pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
+    """Function to generate the scaatter plot of the Cosine Similarity scores
+
+    Args:
+        inputs (list): inference point features
+
+    Returns:
+        dcc.Figure: the scatterplot figure to be displayed on the dashboard
+    """
     df_cos_sim = generate_cosine_sim(inputs)
 
     fig = px.scatter(
         df_cos_sim,
         x="cosine_sim",
         y="index",
-        # y="Approved Date",
-        # color="DeID Doc",
-        # size="No. of Px",
-        # color_discrete_sequence=color_map,
     )
 
     fig = fig.update_yaxes(visible=False, showticklabels=False)
     fig.update_traces(hoverinfo="none", hovertemplate=None)
     fig.update_traces(
-        marker=dict(size=12),
-        # line=dict(width=2,
-        # color='DarkSlateGrey')),
-        # selector=dict(mode='markers')
+        marker=dict(size=20),
     )
     return fig

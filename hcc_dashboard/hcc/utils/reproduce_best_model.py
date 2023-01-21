@@ -1,5 +1,5 @@
 """
-Script to reproduce a Neural network from Matlab into a Keras version
+    Module to reproduce a Neural network from Matlab into a Keras version
 """
 import numpy as np
 import tensorflow as tf
@@ -51,6 +51,11 @@ mystery_weights_2 = np.array(
 
 
 def create_model_arch():
+    """Function to create the neural network architecture
+
+    Returns:
+        tf.keras.Sequential: Keras model
+    """
     model = tf.keras.Sequential()
 
     model.add(tf.keras.Input(shape=(20,)))
@@ -71,6 +76,14 @@ def create_model_arch():
 
 
 def set_model_weights(model):
+    """Function to set the neural network layer's weights
+
+    Args:
+        model (tf.keras.Sequential): neural network which weights are to be set
+
+    Returns:
+        tf.keras.Sequential: the updated neural network
+    """
 
     df_1_weights = pd.read_csv(
         "../data/input_layer_weights_1.csv", header=None
@@ -126,12 +139,29 @@ def set_model_weights(model):
 
 
 def predict(model, inputs):
+    """Function to run the model inference
+
+    Args:
+        model (tf.keras.Sequential): Keras model
+        inputs (list): inference point features
+
+    Returns:
+        list: probabilities of recurrence and non-recurrence
+    """
 
     result = model.predict([inputs])
     return result.tolist()
 
 
 def pipeline(inputs):
+    """Function to streamline the inference process for dash to run
+
+    Args:
+        inputs (list): inference point features
+
+    Returns:
+        list: probabilities of recurrence and non-recurrence
+    """
     model = create_model_arch()
     model = set_model_weights(model)
     return predict(model, inputs)
