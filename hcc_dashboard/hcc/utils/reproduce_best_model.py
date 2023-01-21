@@ -125,14 +125,13 @@ def set_model_weights(model):
     return model
 
 
-def predict(model):
-    result = model.predict(
-        [[0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]]
-    )
+def predict(model, inputs):
+
+    result = model.predict([inputs])
     return result.tolist()
 
 
-def pipeline():
+def pipeline(inputs):
     model = create_model_arch()
     model = set_model_weights(model)
-    return predict(model)
+    return predict(model, inputs)
