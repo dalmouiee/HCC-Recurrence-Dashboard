@@ -14,16 +14,11 @@ COLS_TO_DROP = [
 
 def generate_cosine_sim(inputs):
 
-    test_pat = [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
-
-    for idx in range(len(inputs)):
-        test_pat[idx] = inputs[idx]
-
     df = pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
     for col in df.columns:
-        cos_sim = dot(test_pat, df[col]) / (norm(test_pat) * norm(df[col]))
+        cos_sim = dot(inputs, df[col]) / (norm(inputs) * norm(df[col]))
         df_temp = pd.DataFrame([col, cos_sim]).T
         df_temp.columns = ["patient_id", "cosine_sim"]
         df_cos_sim = pd.concat([df_cos_sim, df_temp])
@@ -49,7 +44,7 @@ def generate_scatter_plot(inputs):
     )
 
     fig = fig.update_yaxes(visible=False, showticklabels=False)
-
+    fig.update_traces(hoverinfo="none", hovertemplate=None)
     fig.update_traces(
         marker=dict(size=12),
         # line=dict(width=2,
