@@ -1,10 +1,13 @@
+"""
+    HCC Dashboard style layout
+"""
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from django_plotly_dash import DjangoDash
 import dash_bootstrap_components as dbc
 
 from .utils.reproduce_best_model import pipeline
-from .components.banner import first_card, second_card, third_card
+from .components.banner import rec_card, non_rec_card, pat_info_card
 from .components.scatter import generate_scatter_plot, generate_cosine_sim
 
 from .components.filters import filter_card
@@ -33,21 +36,26 @@ app.layout = html.Div(
         ),
         html.Br(),
         dbc.Collapse(
-            [
-                html.Br(),
-                filter_card],
+            [html.Br(), filter_card],
             id="collapse",
             is_open=True,
         ),
         html.Br(),
-        dbc.Row([
-            dbc.Col([
-                dbc.Button("Predict HCC Recurrence", id="predict-btn"),
-            ]),
-            dbc.Col([
-                third_card,
-            ], width=9)
-        ]),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dbc.Button("Predict HCC Recurrence", id="predict-btn"),
+                    ]
+                ),
+                dbc.Col(
+                    [
+                        pat_info_card,
+                    ],
+                    width=9,
+                ),
+            ]
+        ),
         html.Br(),
         dcc.Loading(
             html.Div(
@@ -56,9 +64,9 @@ app.layout = html.Div(
                         [
                             dbc.Col(
                                 [
-                                    first_card,
+                                    non_rec_card,
                                     html.Br(),
-                                    second_card,
+                                    rec_card,
                                 ],
                                 width=3,
                             ),
@@ -73,8 +81,6 @@ app.layout = html.Div(
             id="predict-loading",
             style={"width": "100%", "margin": "auto"},
         ),
-        # html.Br(),
-        # dbc.Button("Predict HCC Recurrence", id="predict-btn"),
         html.Br(),
     ],
     style={"width": "95%", "margin": "auto"},
@@ -114,8 +120,19 @@ app.layout = html.Div(
     ],
     prevent_initial_call=True,
 )
-def predict(_, *inputs):
-    print(inputs)
+def infer_model(_, *inputs):
+    """Callback to run the Machine Learning model inference on a datapoint instance from the
+        dashboard
+
+    Args:
+        _ (int): n_clicks of the button that triggers the callback (not necessary)
+        *inputs (list): list of filter inputs that is passed to the machine learning model inference
+
+    Returns:
+        str: Probablity of tumour recurrence
+        str: Probablity of tumour non-recurrence
+        dcc.graph.figure: scatterplot to be displayed on the dashboard
+    """
     res = pipeline(inputs)[0]
 
     fig = generate_scatter_plot(inputs)
@@ -123,13 +140,21 @@ def predict(_, *inputs):
     return f"{res[0]:.2f}%", f"{res[1]:.2f}%", fig
 
 
-
 @app.callback(
     Output("collapse", "is_open"),
     [Input("collapse-button", "n_clicks")],
     [State("collapse", "is_open")],
 )
-def toggle_collapse(n, is_open):
+def toggle_collapse(n, is_open):  # pylint: disable=invalid-name
+    """Callback to toggle the filter container display
+
+    Args:
+        n (int): toggle button n_clicks
+        is_open (bool): checks if the dislplayed is shown or not
+
+    Returns:
+        bool: flips the state of the toggle depending on the input
+    """
     if n:
         return not is_open
     return is_open
@@ -160,10 +185,20 @@ def toggle_collapse(n, is_open):
         State("radioitems-bilirubin-input", "value"),
         State("radioitems-lesion_size-input", "value"),
     ],
+    prevent_initial_call=True,
 )
 def show_info(info, *filters):
-    print(info)
-    df = generate_cosine_sim(filters)
+    """Callback to show the patient information when hovering over the scatterplot datapoint
+
+    Args:
+        info (dict): dictonary that contains the hover information of the datapoint
+        *filters (list): list of filter inputs that is passed to generate the cosine similarity
+            scores
+
+    Returns:
+        str: patient features to be shown in info card
+    """
+    df = generate_cosine_sim(filters)  # pylint: disable=invalid-name
     pat_id = df[df["cosine_sim"] == info["points"][0]["x"]]["patient_id"]
-    
+
     return pat_id
