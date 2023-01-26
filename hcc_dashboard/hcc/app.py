@@ -8,7 +8,10 @@ import dash_bootstrap_components as dbc
 
 from .utils.reproduce_best_model import pipeline
 from .components.banner import rec_card, non_rec_card, pat_info_card
-from .components.scatter import generate_scatter_plot, generate_cosine_sim
+from .components.scatter import (
+    generate_cosine_sim,
+    generate_heatmap_plot,
+)
 
 from .components.filters import filter_card
 
@@ -70,7 +73,11 @@ app.layout = html.Div(
                                 ],
                                 width=3,
                             ),
-                            dbc.Col(dcc.Graph(id="scatter-fig"), width=9),
+                            dbc.Col(
+                                dcc.Graph(id="scatter-fig"),
+                                width=9,
+                                style={"height": "500px"},
+                            ),
                         ],
                         style={"width": "100%", "margin": "auto"},
                     ),
@@ -135,9 +142,9 @@ def infer_model(_, *inputs):
     """
     res = pipeline(inputs)[0]
 
-    fig = generate_scatter_plot(inputs)
+    fig = generate_heatmap_plot(inputs)
 
-    return f"{res[0]:.2f}%", f"{res[1]:.2f}%", fig
+    return f"{(res[0]*100):.2f}%", f"{(res[1]*100):.2f}%", fig
 
 
 @app.callback(
@@ -198,7 +205,7 @@ def show_info(info, *filters):
     Returns:
         str: patient features to be shown in info card
     """
-    df = generate_cosine_sim(filters)  # pylint: disable=invalid-name
+    df = generate_cosine_sim(filters, 20)  # pylint: disable=invalid-name
     pat_id = df[df["cosine_sim"] == info["points"][0]["x"]]["patient_id"]
 
     return pat_id
