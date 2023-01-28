@@ -5,11 +5,11 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from django_plotly_dash import DjangoDash
 import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
 
 from .utils.reproduce_best_model import pipeline
 from .components.banner import rec_card, non_rec_card
 from .components.scatter import (
-    generate_cosine_sim,
     generate_heatmap_plot,
 )
 
@@ -86,12 +86,6 @@ app.layout = html.Div(
                         ),
                     ]
                 ),
-                # dbc.Col(
-                #     [
-                #         pat_info_card,
-                #     ],
-                #     width=9,
-                # ),
             ]
         ),
         html.Br(),
@@ -112,6 +106,17 @@ app.layout = html.Div(
                                 ],
                                 width=3,
                             ),
+                            dbc.Col(
+                                dbc.Button(
+                                    "Download Plot",
+                                    id="btn_image",
+                                    style={
+                                        "visibility": "hidden",
+                                        "background-color": "#18bdc2",
+                                        "border": "2px solid #042749",
+                                    },
+                                ),
+                            ),
                         ],
                         style={"width": "100%", "margin": "auto"},
                     ),
@@ -129,6 +134,7 @@ app.layout = html.Div(
             style={"width": "100%", "margin": "auto"},
         ),
         html.Br(),
+        dcc.Download(id="download-image"),
     ],
     style={"width": "95%", "margin": "auto"},
 )
@@ -140,31 +146,32 @@ app.layout = html.Div(
         Output("card-2-percent-non-rec", "children"),
         Output("scatter-fig", "figure"),
         Output("description_graph", "children"),
+        Output("btn_image", "style"),
     ],
     [
         Input("predict-btn", "n_clicks"),
     ],
     [
-        State("radioitems-age-input", "value"),
-        State("radioitems-ethnicity-input", "value"),
-        State("radioitems-BMI-input", "value"),
-        State("radioitems-sex-input", "value"),
+        State("radioitems-inr-input", "value"),
         State("radioitems-liver-disease-input", "value"),
         State("radioitems-lesions-input", "value"),
-        State("radioitems-satellite-input", "value"),
-        State("radioitems-lympho_vasc-input", "value"),
+        State("radioitems-ethnicity-input", "value"),
         State("radioitems-cirr-input", "value"),
         State("radioitems-dm-input", "value"),
-        State("radioitems-ihd-input", "value"),
-        State("radioitems-pr_tace-input", "value"),
-        State("radioitems-inr-input", "value"),
-        State("radioitems-albumin-input", "value"),
-        State("radioitems-afp-input", "value"),
         State("radioitems-hpvg-input", "value"),
         State("radioitems-alt-input", "value"),
         State("radioitems-egfr-input", "value"),
+        State("radioitems-albumin-input", "value"),
+        State("radioitems-afp-input", "value"),
+        State("radioitems-BMI-input", "value"),
+        State("radioitems-satellite-input", "value"),
+        State("radioitems-lympho_vasc-input", "value"),
+        State("radioitems-sex-input", "value"),
         State("radioitems-bilirubin-input", "value"),
+        State("radioitems-age-input", "value"),
+        State("radioitems-ihd-input", "value"),
         State("radioitems-lesion_size-input", "value"),
+        State("radioitems-pr_tace-input", "value"),
     ],
     prevent_initial_call=True,
 )
@@ -182,11 +189,19 @@ def infer_model(_, *inputs):
         dcc.graph.figure: scatterplot to be displayed on the dashboard
     """
     res = pipeline(inputs)[0]
+    print(inputs)
+    print(res)
 
     fig = generate_heatmap_plot(inputs)
     desc = "This figure represents the top 20 cosine similarity scores between the inference point and machine learning models training set."
 
-    return f"{(res[0]*100):.2f}%", f"{(res[1]*100):.2f}%", fig, desc
+    return (
+        f"{(res[0]*100):.2f}%",
+        f"{(res[1]*100):.2f}%",
+        fig,
+        desc,
+        {"background-color": "#18bdc2", "border": "2px solid #042749"},
+    )
 
 
 @app.callback(
@@ -207,3 +222,18 @@ def toggle_collapse(n, is_open):  # pylint: disable=invalid-name
     if n:
         return not is_open
     return is_open
+
+
+@app.callback(
+    Output("download-image", "data"),
+    [
+        Input("btn_image", "n_clicks"),
+    ],
+    State("scatter-fig", "figure"),
+    prevent_initial_call=True,
+)
+def func(_, fig):
+    temp = go.Figure(fig)
+    print(temp)
+    temp.write_image("graph.pdf", engine="kaleido")
+    return dcc.send_file("graph.pdf")

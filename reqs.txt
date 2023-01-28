@@ -43,3 +43,4 @@ urllib3==1.26.14
 Werkzeug==2.2.2
 whitenoise
 wrapt==1.14.1
+kaleido

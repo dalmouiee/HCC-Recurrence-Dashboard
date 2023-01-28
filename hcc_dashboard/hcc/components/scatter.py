@@ -16,6 +16,29 @@ COLS_TO_DROP = [
     "DaysToRecurrence",
 ]
 
+COLS_ORDER = [
+    "INR",
+    "LiverDisease",
+    "No_Lesions",
+    "Ethnicity",
+    "Cirrhosis",
+    "DM",
+    "HPVG",
+    "ALT",
+    "eGFR",
+    "Albumin",
+    "AFP",
+    "BMI",
+    "Satellite",
+    "LVI",
+    "Sex",
+    "Bilirubin",
+    "Age",
+    "IHD",
+    "Size",
+    "PriorTACE",
+] + COLS_TO_DROP
+
 TABLE_RIGHT_BOUND = 0.898
 MAP_1_LEFT_BOUND = 0.9
 MAP_1_RIGHT_BOUND = 0.95
@@ -107,6 +130,8 @@ def generate_heatmap_plot(inputs):
         dcc.Figure: the figure to be displayed on the dashboard
     """
     df = pd.read_csv("../data/training_data.csv")  # pylint: disable=invalid-name
+
+    df = df.loc[:, COLS_ORDER]
     df_cos_sim = generate_cosine_sim(inputs, 20)
     cols = df.columns.to_list()
     cols.append("patient_id")
