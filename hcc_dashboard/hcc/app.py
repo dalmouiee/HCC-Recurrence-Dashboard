@@ -5,6 +5,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from django_plotly_dash import DjangoDash
 import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
 
 from .utils.reproduce_best_model import pipeline
 from .components.banner import rec_card, non_rec_card, pat_info_card
@@ -89,6 +90,8 @@ app.layout = html.Div(
             style={"width": "100%", "margin": "auto"},
         ),
         html.Br(),
+        dbc.Button("Download Plot", id="btn_image"),
+        dcc.Download(id="download-image"),
     ],
     style={"width": "95%", "margin": "auto"},
 )
@@ -211,3 +214,18 @@ def show_info(info, *filters):
     pat_id = df[df["cosine_sim"] == info["points"][0]["x"]]["patient_id"]
 
     return pat_id
+
+
+@app.callback(
+    Output("download-image", "data"),
+    [
+        Input("btn_image", "n_clicks"),
+    ],
+    State("scatter-fig", "figure"),
+    prevent_initial_call=True,
+)
+def func(_, fig):
+    temp = go.Figure(fig)
+    print(temp)
+    temp.write_image("graph.pdf", engine="kaleido")
+    return dcc.send_file("graph.pdf")
