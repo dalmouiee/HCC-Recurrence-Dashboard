@@ -104,26 +104,26 @@ app.layout = html.Div(
         Input("predict-btn", "n_clicks"),
     ],
     [
-        State("radioitems-age-input", "value"),
-        State("radioitems-ethnicity-input", "value"),
-        State("radioitems-BMI-input", "value"),
-        State("radioitems-sex-input", "value"),
+        State("radioitems-inr-input", "value"),
         State("radioitems-liver-disease-input", "value"),
         State("radioitems-lesions-input", "value"),
-        State("radioitems-satellite-input", "value"),
-        State("radioitems-lympho_vasc-input", "value"),
+        State("radioitems-ethnicity-input", "value"),
         State("radioitems-cirr-input", "value"),
         State("radioitems-dm-input", "value"),
-        State("radioitems-ihd-input", "value"),
-        State("radioitems-pr_tace-input", "value"),
-        State("radioitems-inr-input", "value"),
-        State("radioitems-albumin-input", "value"),
-        State("radioitems-afp-input", "value"),
         State("radioitems-hpvg-input", "value"),
         State("radioitems-alt-input", "value"),
         State("radioitems-egfr-input", "value"),
+        State("radioitems-albumin-input", "value"),
+        State("radioitems-afp-input", "value"),
+        State("radioitems-BMI-input", "value"),
+        State("radioitems-satellite-input", "value"),
+        State("radioitems-lympho_vasc-input", "value"),
+        State("radioitems-sex-input", "value"),
         State("radioitems-bilirubin-input", "value"),
+        State("radioitems-age-input", "value"),
+        State("radioitems-ihd-input", "value"),
         State("radioitems-lesion_size-input", "value"),
+        State("radioitems-pr_tace-input", "value"),
     ],
     prevent_initial_call=True,
 )
@@ -141,6 +141,8 @@ def infer_model(_, *inputs):
         dcc.graph.figure: scatterplot to be displayed on the dashboard
     """
     res = pipeline(inputs)[0]
+    print(inputs)
+    print(res)
 
     fig = generate_heatmap_plot(inputs)
 
