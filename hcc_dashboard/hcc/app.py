@@ -252,7 +252,7 @@ def download_plot_to_pdf(_, fig):
         for eventual downloading
     """
 
-    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as temp_file:
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as temp_file:
         temp_fig = go.Figure(fig)
         pio.write_image(temp_fig, temp_file.name)
         return dcc.send_file(temp_file.name)
