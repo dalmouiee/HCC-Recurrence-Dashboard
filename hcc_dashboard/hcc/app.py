@@ -1,11 +1,14 @@
 """
     HCC Dashboard style layout
 """
+import tempfile
+
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from django_plotly_dash import DjangoDash
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
+import plotly.io as pio
 
 from .utils.reproduce_best_model import pipeline
 from .components.banner import rec_card, non_rec_card
@@ -44,7 +47,9 @@ app.layout = html.Div(
         ),
         html.Br(),
         html.P(
-            "This dashboard is a Graphical User Interface (GUI) for the model described in the following paper: 'Artificial intelligence reliably identifies patients at risk of HCC recurrence one-year post-surgical resection'."
+            """This dashboard is a Graphical User Interface (GUI) for the model described
+            in the following paper: 'Artificial intelligence reliably identifies patients
+            at risk of HCC recurrence one-year post-surgical resection'."""
         ),
         html.Div(
             [
@@ -152,26 +157,26 @@ app.layout = html.Div(
         Input("predict-btn", "n_clicks"),
     ],
     [
-        State("radioitems-inr-input", "value"),
-        State("radioitems-liver-disease-input", "value"),
-        State("radioitems-lesions-input", "value"),
-        State("radioitems-ethnicity-input", "value"),
-        State("radioitems-cirr-input", "value"),
-        State("radioitems-dm-input", "value"),
-        State("radioitems-hpvg-input", "value"),
-        State("radioitems-alt-input", "value"),
-        State("radioitems-egfr-input", "value"),
-        State("radioitems-albumin-input", "value"),
-        State("radioitems-afp-input", "value"),
-        State("radioitems-BMI-input", "value"),
         State("radioitems-satellite-input", "value"),
-        State("radioitems-lympho_vasc-input", "value"),
-        State("radioitems-sex-input", "value"),
-        State("radioitems-bilirubin-input", "value"),
-        State("radioitems-age-input", "value"),
-        State("radioitems-ihd-input", "value"),
-        State("radioitems-lesion_size-input", "value"),
+        State("radioitems-egfr-input", "value"),
         State("radioitems-pr_tace-input", "value"),
+        State("radioitems-afp-input", "value"),
+        State("radioitems-lympho_vasc-input", "value"),
+        State("radioitems-ethnicity-input", "value"),
+        State("radioitems-sex-input", "value"),
+        State("radioitems-albumin-input", "value"),
+        State("radioitems-lesions-input", "value"),
+        State("radioitems-lesion_size-input", "value"),
+        State("radioitems-cirr-input", "value"),
+        State("radioitems-BMI-input", "value"),
+        State("radioitems-age-input", "value"),
+        State("radioitems-alt-input", "value"),
+        State("radioitems-inr-input", "value"),
+        State("radioitems-ihd-input", "value"),
+        State("radioitems-dm-input", "value"),
+        State("radioitems-liver-disease-input", "value"),
+        State("radioitems-hpvg-input", "value"),
+        State("radioitems-bilirubin-input", "value"),
     ],
     prevent_initial_call=True,
 )
@@ -189,11 +194,12 @@ def infer_model(_, *inputs):
         dcc.graph.figure: scatterplot to be displayed on the dashboard
     """
     res = pipeline(inputs)[0]
-    print(inputs)
-    print(res)
 
     fig = generate_heatmap_plot(inputs)
-    desc = "This figure represents the top 20 cosine similarity scores between the inference point and machine learning models training set."
+    desc = """
+    This figure represents the top 20 cosine similarity scores between the inference point
+    and machine learning models training set.
+    """
 
     return (
         f"{(res[0]*100):.2f}%",
@@ -232,8 +238,21 @@ def toggle_collapse(n, is_open):  # pylint: disable=invalid-name
     State("scatter-fig", "figure"),
     prevent_initial_call=True,
 )
-def func(_, fig):
-    temp = go.Figure(fig)
-    print(temp)
-    temp.write_image("graph.pdf", engine="kaleido")
-    return dcc.send_file("graph.pdf")
+def download_plot_to_pdf(_, fig):
+    """Function to download the main plot figure to a PDF file to the client's
+        machine
+
+    Args:
+        _ (dbc.Button.n_clicks): the "Download Plot" button nclicks attribute that
+        triggers the callback
+        fig (plotly.graph_objects.Figure): Plotly figure that will be downloaded
+
+    Returns:
+        dcc.Download.data : the plot that will be sent ot the Download component
+        for eventual downloading
+    """
+
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as temp_file:
+        temp_fig = go.Figure(fig)
+        pio.write_image(temp_fig, temp_file.name)
+        return dcc.send_file(temp_file.name)
