@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from hcc_dashboard.settings import DATA_PATH
+from hcc_dashboard.settings import DATA_PATH  # pylint: disable=import-error
 
 COLS_TO_DROP = [
     "PlateletCount",

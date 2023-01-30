@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 
-from hcc_dashboard.settings import DATA_PATH
+from hcc_dashboard.settings import DATA_PATH  # pylint: disable=import-error
 
 mystery_weights_32 = np.array(
     [
