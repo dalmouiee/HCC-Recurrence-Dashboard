@@ -33,6 +33,7 @@ jobs:
           pip install -r reqs.txt
           pip install -r reqs-dev.txt
       - name: Set Environment variable for testing
+        run: |
           export DATA_PATH=testing
       - name: Lint with Pylint
         run: |
