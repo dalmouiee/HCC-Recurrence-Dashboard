@@ -87,6 +87,7 @@ def set_model_weights(model):
         tf.keras.Sequential: the updated neural network
     """
 
+    print(DATA_PATH)
     df_1_weights = pd.read_csv(
         f"{DATA_PATH}/input_layer_weights_1.csv", header=None
     ).T.to_numpy()
