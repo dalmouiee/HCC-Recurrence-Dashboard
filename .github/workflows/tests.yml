@@ -38,4 +38,4 @@ jobs:
           pylint hcc_dashboard/hcc
       - name: Tests validation
         run: |
-          python hcc_dashboard/manage.py test hcc_dashboard.hcc.tests
+          python hcc_dashboard/manage.py test hcc.tests
