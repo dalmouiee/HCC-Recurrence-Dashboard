@@ -34,8 +34,8 @@ jobs:
           pip install -r reqs-dev.txt
       - name: Lint with Pylint
         run: |
-          pylint hcc_dashboard
-          pylint hcc
+          pylint hcc_dashboard/hcc_dashboard
+          pylint hcc_dashboard/hcc
       - name: Tests validation
         run: |
-          python manage.py test hcc.tests
+          python manage.py test hcc_dashboard.hcc.tests
