@@ -32,9 +32,6 @@ jobs:
           pip install --upgrade pip
           pip install -r reqs.txt
           pip install -r reqs-dev.txt
-      - name: Set Environment variable for testing
-        run: |
-          export DATA_PATH=testing
       - name: Lint with Pylint
         run: |
           pylint hcc_dashboard/hcc_dashboard
@@ -42,3 +39,5 @@ jobs:
       - name: Tests validation
         run: |
           python hcc_dashboard/manage.py test hcc.tests
+        env:
+          DATA_PATH: testing
