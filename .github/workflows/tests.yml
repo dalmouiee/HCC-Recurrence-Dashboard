@@ -4,7 +4,7 @@
 # Pipeline that checks branches that have been pushed to "Main" OR are the source branch in a newly created pull request into "Main"
 # Fails the test if there are Python syntax errors or undefined names OR pytest fails
 
-name: Pydicer Pytest and Pylint Validaiton
+name: HCC dashboard Pylint and tests Validation
 
 on:
   push:
@@ -27,14 +27,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Python modules with poetry
+      - name: Install Python modules
         run: |
           pip install --upgrade pip
           pip install -r reqs.txt
           pip install -r reqs-dev.txt
       - name: Lint with Pylint
         run: |
-          pylint pydicer
-      - name: Pytest validation
+          pylint hcc_dashboard
+          pylint hcc
+      - name: Tests validation
         run: |
           python manage.py test hcc.tests
