@@ -5,6 +5,8 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 
+from hcc_dashboard.settings import DATA_PATH
+
 mystery_weights_32 = np.array(
     [
         0.0,
@@ -86,40 +88,40 @@ def set_model_weights(model):
     """
 
     df_1_weights = pd.read_csv(
-        "../data/input_layer_weights_1.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_1.csv", header=None
     ).T.to_numpy()
     df_2_weights = pd.read_csv(
-        "../data/input_layer_weights_2.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_2.csv", header=None
     ).T.to_numpy()
     df_3_weights = pd.read_csv(
-        "../data/input_layer_weights_3.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_3.csv", header=None
     ).T.to_numpy()
     df_4_weights = pd.read_csv(
-        "../data/input_layer_weights_4.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_4.csv", header=None
     ).T.to_numpy()
     df_5_weights = pd.read_csv(
-        "../data/input_layer_weights_5.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_5.csv", header=None
     ).T.to_numpy()
     df_6_weights = pd.read_csv(
-        "../data/input_layer_weights_6.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_6.csv", header=None
     ).T.to_numpy()
     df_7_weights = pd.read_csv(
-        "../data/input_layer_weights_7.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_7.csv", header=None
     ).T.to_numpy()
     df_8_weights = pd.read_csv(
-        "../data/input_layer_weights_8.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_8.csv", header=None
     ).T.to_numpy()
     df_9_weights = pd.read_csv(
-        "../data/input_layer_weights_9.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_9.csv", header=None
     ).T.to_numpy()
     df_10_weights = pd.read_csv(
-        "../data/input_layer_weights_10.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_10.csv", header=None
     ).T.to_numpy()
     df_11_weights = pd.read_csv(
-        "../data/input_layer_weights_11.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_11.csv", header=None
     ).T.to_numpy()
     df_12_weights = pd.read_csv(
-        "../data/input_layer_weights_12.csv", header=None
+        f"{DATA_PATH}/input_layer_weights_12.csv", header=None
     ).T.to_numpy()
 
     model.layers[0].set_weights([df_1_weights, mystery_weights_32])

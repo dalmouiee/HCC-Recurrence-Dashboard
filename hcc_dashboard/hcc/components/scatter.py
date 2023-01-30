@@ -8,6 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+from hcc_dashboard.settings import DATA_PATH
+
 COLS_TO_DROP = [
     "PlateletCount",
     "CVS",
@@ -78,7 +80,7 @@ def generate_cosine_sim(inputs, n):  # pylint: disable=invalid-name
     """
 
     df = (  # pylint: disable=invalid-name
-        pd.read_csv("../data/training_data.csv").drop(COLS_TO_DROP, axis=1).T
+        pd.read_csv(f"{DATA_PATH}/training_data.csv").drop(COLS_TO_DROP, axis=1).T
     )
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
@@ -129,7 +131,7 @@ def generate_heatmap_plot(inputs):
     Returns:
         dcc.Figure: the figure to be displayed on the dashboard
     """
-    df = pd.read_csv("../data/training_data.csv")  # pylint: disable=invalid-name
+    df = pd.read_csv(f"{DATA_PATH}/training_data.csv")  # pylint: disable=invalid-name
 
     df = df.loc[:, COLS_ORDER]  # pylint: disable=invalid-name
     df_cos_sim = generate_cosine_sim(inputs, 20)
