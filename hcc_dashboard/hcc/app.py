@@ -40,7 +40,7 @@ app.layout = html.Div(
                     )
                 ),
             ],
-            brand="HCC Recurrence Post Resection Predictor",
+            brand="AI predictor of HCC Recurrence Post-Resection",
             brand_style={"color": "white"},
             brand_href="#",
             color="#042749",

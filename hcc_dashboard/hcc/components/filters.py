@@ -12,90 +12,20 @@ filter_card = html.Div(
                     [
                         dbc.Row(
                             [
-                                dbc.Col(
+                                dbc.Row(
                                     [
-                                        dbc.Label("Satellite"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-satellite-input",
-                                        ),
+                                        html.H4(
+                                            "Demographics",
+                                            style={"font-weight": "bold"},
+                                        )
                                     ]
                                 ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("Lymphovascular invasion"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-lympho_vasc-input",
-                                        ),
-                                    ]
+                                dbc.Row(
+                                    html.Hr(
+                                        style={"border-width": "6px", "width": "90%"}
+                                    ),
                                 ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("Cirrhosis"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-cirr-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("DM"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-dm-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("IHD"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-ihd-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("Prior TACE"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": "Yes", "value": 0},
-                                                {"label": "No", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-pr_tace-input",
-                                        ),
-                                    ]
-                                ),
-                            ]
-                        ),
-                        html.Hr(style={"border-width": "6px"}),
-                        html.Br(),
-                        dbc.Row(
-                            [
+                                html.Br(),
                                 dbc.Col(
                                     [
                                         dbc.Label("Age"),
@@ -125,6 +55,38 @@ filter_card = html.Div(
                                 ),
                                 dbc.Col(
                                     [
+                                        dbc.Label("Sex"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Male", "value": 0},
+                                                {"label": "Female", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-sex-input",
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                        html.Hr(style={"border-width": "6px"}),
+                        html.Br(),
+                        dbc.Row(
+                            [
+                                dbc.Row(
+                                    [
+                                        html.H4(
+                                            "Metabolic", style={"font-weight": "bold"}
+                                        )
+                                    ]
+                                ),
+                                dbc.Row(
+                                    html.Hr(
+                                        style={"border-width": "6px", "width": "90%"}
+                                    ),
+                                ),
+                                html.Br(),
+                                dbc.Col(
+                                    [
                                         dbc.Label("BMI"),
                                         dbc.RadioItems(
                                             options=[
@@ -138,17 +100,125 @@ filter_card = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        dbc.Label("Sex"),
+                                        dbc.Label("eGFR"),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Male", "value": 0},
-                                                {"label": "Female", "value": 1},
+                                                {"label": ">=90", "value": 0},
+                                                {"label": "<90", "value": 1},
                                             ],
                                             value=1,
-                                            id="radioitems-sex-input",
+                                            id="radioitems-egfr-input",
                                         ),
                                     ]
                                 ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("IHD"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-ihd-input",
+                                        ),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("type II DM"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-dm-input",
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                        html.Hr(style={"border-width": "6px"}),
+                        html.Br(),
+                        dbc.Row(
+                            [
+                                dbc.Row(
+                                    [html.H4("Tumor", style={"font-weight": "bold"})]
+                                ),
+                                dbc.Row(
+                                    html.Hr(
+                                        style={"border-width": "6px", "width": "90%"}
+                                    ),
+                                ),
+                                html.Br(),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("Lymphovascular invasion"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-lympho_vasc-input",
+                                        ),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("Prior TACE"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-pr_tace-input",
+                                        ),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("Satellite"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-satellite-input",
+                                        ),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("Size of Lesion (cm)"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": ">=5", "value": 0},
+                                                {"label": "<5", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-lesion_size-input",
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                        html.Hr(style={"border-width": "6px"}),
+                        html.Br(),
+                        dbc.Row(
+                            [
+                                dbc.Row(
+                                    [html.H4("Liver", style={"font-weight": "bold"})]
+                                ),
+                                dbc.Row(
+                                    html.Hr(
+                                        style={"border-width": "6px", "width": "90%"}
+                                    ),
+                                ),
+                                html.Br(),
                                 dbc.Col(
                                     [
                                         dbc.Label("Liver Disease"),
@@ -180,23 +250,30 @@ filter_card = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        dbc.Label("INR"),
+                                        dbc.Label("Cirrhosis"),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": ">1.1", "value": 0},
-                                                {"label": "<=1.1", "value": 1},
+                                                {"label": "Yes", "value": 0},
+                                                {"label": "No", "value": 1},
                                             ],
                                             value=1,
-                                            id="radioitems-inr-input",
+                                            id="radioitems-cirr-input",
                                         ),
                                     ]
                                 ),
-                            ]
-                        ),
-                        html.Hr(style={"border-width": "6px"}),
-                        html.Br(),
-                        dbc.Row(
-                            [
+                                dbc.Col(
+                                    [
+                                        dbc.Label("Bilirubin"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": ">20", "value": 0},
+                                                {"label": "<=20", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-bilirubin-input",
+                                        ),
+                                    ]
+                                ),
                                 dbc.Col(
                                     [
                                         dbc.Label("Albumin"),
@@ -207,6 +284,19 @@ filter_card = html.Div(
                                             ],
                                             value=1,
                                             id="radioitems-albumin-input",
+                                        ),
+                                    ]
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Label("HPVG"),
+                                        dbc.RadioItems(
+                                            options=[
+                                                {"label": ">5", "value": 0},
+                                                {"label": "<=5", "value": 1},
+                                            ],
+                                            value=1,
+                                            id="radioitems-hpvg-input",
                                         ),
                                     ]
                                 ),
@@ -226,19 +316,6 @@ filter_card = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        dbc.Label("HPVG"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": ">5", "value": 0},
-                                                {"label": "<=5", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-hpvg-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
                                         dbc.Label("ALT"),
                                         dbc.RadioItems(
                                             options=[
@@ -252,40 +329,14 @@ filter_card = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        dbc.Label("eGFR"),
+                                        dbc.Label("INR"),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": ">=90", "value": 0},
-                                                {"label": "<90", "value": 1},
+                                                {"label": ">1.1", "value": 0},
+                                                {"label": "<=1.1", "value": 1},
                                             ],
                                             value=1,
-                                            id="radioitems-egfr-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("Bilirubin"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": ">20", "value": 0},
-                                                {"label": "<=20", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-bilirubin-input",
-                                        ),
-                                    ]
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Label("Size of Lesion (cm)"),
-                                        dbc.RadioItems(
-                                            options=[
-                                                {"label": ">=5", "value": 0},
-                                                {"label": "<5", "value": 1},
-                                            ],
-                                            value=1,
-                                            id="radioitems-lesion_size-input",
+                                            id="radioitems-inr-input",
                                         ),
                                     ]
                                 ),
