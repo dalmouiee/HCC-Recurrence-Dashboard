@@ -54,11 +54,12 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Img(
-                    src="../static/pipeline_img.png",
+                    src="../static/website-img.gif",
                     style={
-                        "width": "80%",
-                        "height": "60%",
-                    },
+                        "width": "75%",
+                        "height": "40%",
+                        "object-fit": "none",
+                    },  # crop image as it has some residual border
                 ),
             ],
             style={"padding-left": "20%"},
@@ -103,13 +104,13 @@ app.layout = html.Div(
                                 [
                                     non_rec_card,
                                 ],
-                                width=3,
+                                width=5,
                             ),
                             dbc.Col(
                                 [
                                     rec_card,
                                 ],
-                                width=3,
+                                width=5,
                             ),
                             dbc.Col(
                                 dbc.Button(
@@ -129,7 +130,6 @@ app.layout = html.Div(
                     html.P(id="description_graph"),
                     html.Div(
                         dcc.Graph(id="scatter-fig"),
-                        style={"height": "500px"},
                     ),
                     html.Br(),
                 ],
@@ -197,8 +197,8 @@ def infer_model(_, *inputs):
 
     fig = generate_heatmap_plot(inputs)
     desc = """
-    This figure represents the top 20 cosine similarity scores between the inference point
-    and machine learning models training set.
+    This plot shows the top 20 patients in the development cohort whose clinical variables are 
+    most similar to the queried patient using the cosine similarity metric.
     """
 
     return (
@@ -254,5 +254,5 @@ def download_plot_to_pdf(_, fig):
 
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as temp_file:
         temp_fig = go.Figure(fig)
-        pio.write_image(temp_fig, temp_file.name)
+        pio.write_image(temp_fig, temp_file.name, height=780, width=1200)
         return dcc.send_file(temp_file.name)

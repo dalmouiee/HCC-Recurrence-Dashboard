@@ -41,13 +41,34 @@ COLS_ORDER = [
     "Bilirubin",
 ] + COLS_TO_DROP
 
+MAPPINGS = {
+    "Satellite": {0: "No", 1: "Yes"},
+    "IHD": {0: "No", 1: "Yes"},
+    "DM": {0: "No", 1: "Yes"},
+    "LVI": {0: "No", 1: "Yes"},
+    "PriorTACE": {0: "No", 1: "Yes"},
+    "Cirrhosis": {0: "No", 1: "Yes"},
+    "Age": {0: "=>65", 1: "<65"},
+    "Ethnicity": {0: "Asian", 1: "Caucasian", 2: "Others"},
+    "eGFR": {0: ">=90", 1: "<90"},
+    "Size": {0: ">=5", 1: "<5"},
+    "LiverDisease": {0: "NAFLD", 1: "HepB", 2: "HepC", 3: "Alcohol", 4: "Others"},
+    "No_Lesions": {0: ">1", 1: "<=1"},
+    "Bilirubin": {0: "<=20", 1: ">20"},
+    "Albumin": {0: ">=35", 1: "<35"},
+    "HPVG": {0: ">5", 1: "<=5"},
+    "AFP": {0: ">100", 1: "[8-100]", 2: "<=8"},
+    "ALT": {0: "<50", 1: "<=50"},
+    "INR": {0: ">1.1", 1: "<=1.1"},
+}
+
 TABLE_RIGHT_BOUND = 0.898
 MAP_1_LEFT_BOUND = 0.9
 MAP_1_RIGHT_BOUND = 0.95
 MAP_2_LEFT_BOUND = 0.95
 MAP_2_RIGHT_BOUND = 1
-MAPS_BOTTOM_BOUND = 0.1
-MAPS_TOP_BOUND = 0.94
+MAPS_BOTTOM_BOUND = 0.024
+MAPS_TOP_BOUND = 0.96
 TABLE_BOTTOM_BOUND = 0
 
 GREEN_RED_CMAP = [[0, "rgb(0,255,0)"], [1, "rgb(255,0,0)"]]
@@ -148,6 +169,7 @@ def generate_heatmap_plot(inputs):
 
     df_3 = pd.DataFrame(df_final["Recurrence"]).rename(columns={"Recurrence": "Recur."})
     df_3 = df_3.reset_index(drop=True)
+    df_3["label"] = df_3["Recur."].map({0: "No", 1: "Yes"})
 
     df_2 = pd.DataFrame(df_final["cosine_sim"]).rename(
         columns={"cosine_sim": "SimScore"}
@@ -155,6 +177,13 @@ def generate_heatmap_plot(inputs):
     df_2 = df_2.reset_index(drop=True)
 
     df_1 = df_final.drop(COLS_TO_DROP + ["cosine_sim", "patient_id"], axis=1)
+
+    for (
+        col
+    ) in (
+        MAPPINGS.keys()
+    ):  # pylint: disable=consider-using-dict-items,consider-iterating-dictionary
+        df_1[col] = df_1[col].map(MAPPINGS[col])
 
     fig = make_subplots(rows=1, cols=3)
     trace_1 = go.Table(
@@ -165,6 +194,7 @@ def generate_heatmap_plot(inputs):
             values=[df_1[x] for x in df_1.columns],
             fill_color="lavender",
             align="left",
+            height=36,
         ),
         domain=dict(x=[0, TABLE_RIGHT_BOUND], y=[TABLE_BOTTOM_BOUND, 1]),
     )
@@ -174,9 +204,10 @@ def generate_heatmap_plot(inputs):
         df_to_plotly(df_3),
         xaxis="x2",
         yaxis="y2",
+        x=df_3["Recur."],
         colorscale=GREEN_RED_CMAP,
         showscale=False,
-        text=df_3["Recur."].astype(str),
+        text=df_3["label"].astype(str),
         texttemplate="%{text}",
         xgap=1,
         ygap=1,
@@ -194,6 +225,9 @@ def generate_heatmap_plot(inputs):
             dict(
                 domain=[MAP_2_LEFT_BOUND, MAP_2_RIGHT_BOUND],
                 anchor="y2",
+                tickmode="array",
+                tickvals=[0.5],  # Set new label at the 0.5 tick value
+                ticktext=["Recur."],  # New label
                 visible=True,
             )
         ),
@@ -219,8 +253,7 @@ def generate_heatmap_plot(inputs):
             b=0,  # bottom margin
             t=5,  # top margin
         ),
-        height=480,
+        height=770,
     )
     fig = go.Figure(data=[trace_1, trace_2, trace_3], layout=layout)
-    fig.update_xaxes(tickangle=15)
     return fig
