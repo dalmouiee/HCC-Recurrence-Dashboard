@@ -55,11 +55,6 @@ app.layout = html.Div(
             [
                 html.Img(
                     src="../static/website-img.gif",
-                    style={
-                        "width": "75%",
-                        "height": "40%",
-                        "object-fit": "none",
-                    },  # crop image as it has some residual border
                 ),
             ],
             style={"padding-left": "20%"},
@@ -129,7 +124,7 @@ app.layout = html.Div(
                     html.Br(),
                     html.P(id="description_graph"),
                     html.Div(
-                        dcc.Graph(id="scatter-fig"),
+                        dcc.Graph(id="scatter-fig", style={"visibility": "hidden"}),
                     ),
                     html.Br(),
                 ],
@@ -150,6 +145,7 @@ app.layout = html.Div(
         Output("card-1-percent-rec", "children"),
         Output("card-2-percent-non-rec", "children"),
         Output("scatter-fig", "figure"),
+        Output("scatter-fig", "style"),
         Output("description_graph", "children"),
         Output("btn_image", "style"),
     ],
@@ -205,6 +201,7 @@ def infer_model(_, *inputs):
         f"{(res[0]*100):.2f}%",
         f"{(res[1]*100):.2f}%",
         fig,
+        {},
         desc,
         {"background-color": "#18bdc2", "border": "2px solid #042749"},
     )
