@@ -85,7 +85,11 @@ app.layout = html.Div(
                                 "border": "2px solid white",
                             },
                         ),
-                    ]
+                    ],
+                    width=2,
+                ),
+                dbc.Col(
+                    dcc.Loading(html.Div(id="placeholder-loading"), id=""), width=2
                 ),
             ]
         ),
@@ -228,7 +232,10 @@ def toggle_collapse(n, is_open):  # pylint: disable=invalid-name
 
 
 @app.callback(
-    Output("download-image", "data"),
+    [
+        Output("download-image", "data"),
+        Output("placeholder-loading", "children"),
+    ],
     [
         Input("btn_image", "n_clicks"),
     ],
@@ -252,4 +259,4 @@ def download_plot_to_pdf(_, fig):
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as temp_file:
         temp_fig = go.Figure(fig)
         pio.write_image(temp_fig, temp_file.name, height=780, width=1200)
-        return dcc.send_file(temp_file.name)
+        return dcc.send_file(temp_file.name), ""
