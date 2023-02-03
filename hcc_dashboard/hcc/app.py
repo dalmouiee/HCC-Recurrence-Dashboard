@@ -54,11 +54,7 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Img(
-                    src="../static/pipeline_img.png",
-                    style={
-                        "width": "80%",
-                        "height": "60%",
-                    },
+                    src="../static/website-img.gif",
                 ),
             ],
             style={"padding-left": "20%"},
@@ -89,7 +85,11 @@ app.layout = html.Div(
                                 "border": "2px solid white",
                             },
                         ),
-                    ]
+                    ],
+                    width=2,
+                ),
+                dbc.Col(
+                    dcc.Loading(html.Div(id="placeholder-loading"), id=""), width=2
                 ),
             ]
         ),
@@ -103,13 +103,13 @@ app.layout = html.Div(
                                 [
                                     non_rec_card,
                                 ],
-                                width=3,
+                                width=5,
                             ),
                             dbc.Col(
                                 [
                                     rec_card,
                                 ],
-                                width=3,
+                                width=5,
                             ),
                             dbc.Col(
                                 dbc.Button(
@@ -128,8 +128,7 @@ app.layout = html.Div(
                     html.Br(),
                     html.P(id="description_graph"),
                     html.Div(
-                        dcc.Graph(id="scatter-fig"),
-                        style={"height": "500px"},
+                        dcc.Graph(id="scatter-fig", style={"visibility": "hidden"}),
                     ),
                     html.Br(),
                 ],
@@ -150,6 +149,7 @@ app.layout = html.Div(
         Output("card-1-percent-rec", "children"),
         Output("card-2-percent-non-rec", "children"),
         Output("scatter-fig", "figure"),
+        Output("scatter-fig", "style"),
         Output("description_graph", "children"),
         Output("btn_image", "style"),
     ],
@@ -197,14 +197,15 @@ def infer_model(_, *inputs):
 
     fig = generate_heatmap_plot(inputs)
     desc = """
-    This figure represents the top 20 cosine similarity scores between the inference point
-    and machine learning models training set.
+    This plot shows the top 20 patients in the development cohort whose clinical variables are 
+    most similar to the queried patient using the cosine similarity metric.
     """
 
     return (
         f"{(res[0]*100):.2f}%",
         f"{(res[1]*100):.2f}%",
         fig,
+        {},
         desc,
         {"background-color": "#18bdc2", "border": "2px solid #042749"},
     )
@@ -231,7 +232,10 @@ def toggle_collapse(n, is_open):  # pylint: disable=invalid-name
 
 
 @app.callback(
-    Output("download-image", "data"),
+    [
+        Output("download-image", "data"),
+        Output("placeholder-loading", "children"),
+    ],
     [
         Input("btn_image", "n_clicks"),
     ],
@@ -254,5 +258,5 @@ def download_plot_to_pdf(_, fig):
 
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as temp_file:
         temp_fig = go.Figure(fig)
-        pio.write_image(temp_fig, temp_file.name)
-        return dcc.send_file(temp_file.name)
+        pio.write_image(temp_fig, temp_file.name, height=780, width=1200)
+        return dcc.send_file(temp_file.name), ""
