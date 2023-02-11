@@ -205,8 +205,8 @@ def infer_model(_, *inputs):
     non_rec_score = f"{(100 - float(rec_score)):.2f}"
 
     return (
-        rec_score,
-        non_rec_score,
+        f"{rec_score}%",
+        f"{non_rec_score}%",
         fig,
         {},
         desc,
