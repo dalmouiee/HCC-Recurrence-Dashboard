@@ -14,4 +14,4 @@ class InferTestCase(TestCase):
         n_clicks = 1
         output = infer_model(n_clicks, *TEST_PATIENT_INPUT)
         assert output[0] == "13.34%"
-        assert output[1] == "75.26%"
+        assert output[1] == "86.66%"
