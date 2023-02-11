@@ -201,9 +201,12 @@ def infer_model(_, *inputs):
     most similar to the queried patient using the cosine similarity metric.
     """
 
+    rec_score = f"{res[0]*100:.2f}"
+    non_rec_score = f"{(100 - float(rec_score)):.2f}"
+
     return (
-        f"{(res[0]*100):.2f}%",
-        f"{(res[1]*100):.2f}%",
+        rec_score,
+        non_rec_score,
         fig,
         {},
         desc,
