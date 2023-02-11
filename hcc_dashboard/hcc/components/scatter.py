@@ -1,12 +1,11 @@
 """
     Module to handle the scatter plot similarity scores graph
 """
-from numpy import dot
-from numpy.linalg import norm
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from scipy.spatial.distance import cosine
 
 from hcc_dashboard.settings import DATA_PATH  # pylint: disable=import-error
 
@@ -60,6 +59,8 @@ MAPPINGS = {
     "AFP": {0: ">100", 1: "[8-100]", 2: "<=8"},
     "ALT": {0: "<50", 1: "<=50"},
     "INR": {0: ">1.1", 1: "<=1.1"},
+    "Sex": {0: "Male", 1: "Female"},
+    "BMI": {0: ">=25", 1: "<=25"},
 }
 
 TABLE_RIGHT_BOUND = 0.898
@@ -106,7 +107,7 @@ def generate_cosine_sim(inputs, n):  # pylint: disable=invalid-name
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
     for col in df.columns:
-        cos_sim = dot(inputs, df[col]) / (norm(inputs) * norm(df[col]))
+        cos_sim = cosine(inputs, df[col])
         df_temp = pd.DataFrame([col, cos_sim]).T
         df_temp.columns = ["patient_id", "cosine_sim"]
         df_cos_sim = pd.concat([df_cos_sim, df_temp])
@@ -169,7 +170,8 @@ def generate_heatmap_plot(inputs):
 
     df_3 = pd.DataFrame(df_final["Recurrence"]).rename(columns={"Recurrence": "Recur."})
     df_3 = df_3.reset_index(drop=True)
-    df_3["label"] = df_3["Recur."].map({0: "No", 1: "Yes"})
+    df_4 = pd.DataFrame(columns=["label"])
+    df_4["label"] = df_3["Recur."].map({0: "N", 1: "Y"})
 
     df_2 = pd.DataFrame(df_final["cosine_sim"]).rename(
         columns={"cosine_sim": "SimScore"}
@@ -181,9 +183,11 @@ def generate_heatmap_plot(inputs):
     for (
         col
     ) in (
-        MAPPINGS.keys()
-    ):  # pylint: disable=consider-using-dict-items,consider-iterating-dictionary
-        df_1[col] = df_1[col].map(MAPPINGS[col])
+        MAPPINGS.keys()  # pylint: disable=consider-using-dict-items,consider-iterating-dictionary
+    ):
+        df_1[col] = df_1[col].map(
+            MAPPINGS[col]
+        )  # pylint: disable=consider-iterating-dictionary
 
     fig = make_subplots(rows=1, cols=3)
     trace_1 = go.Table(
@@ -199,15 +203,19 @@ def generate_heatmap_plot(inputs):
         domain=dict(x=[0, TABLE_RIGHT_BOUND], y=[TABLE_BOTTOM_BOUND, 1]),
     )
 
-    trace_2 = go.Heatmap(df_to_plotly(df_2), xaxis="x1", yaxis="y1")
+    trace_2 = go.Heatmap(
+        df_to_plotly(df_2),
+        xaxis="x1",
+        yaxis="y1",
+    )
+
     trace_3 = go.Heatmap(
         df_to_plotly(df_3),
         xaxis="x2",
         yaxis="y2",
-        x=df_3["Recur."],
         colorscale=GREEN_RED_CMAP,
         showscale=False,
-        text=df_3["label"].astype(str),
+        text=df_4["label"].astype(str),
         texttemplate="%{text}",
         xgap=1,
         ygap=1,
@@ -219,6 +227,7 @@ def generate_heatmap_plot(inputs):
                 domain=[MAP_1_LEFT_BOUND, MAP_1_RIGHT_BOUND],
                 anchor="y1",
                 visible=True,
+                side="top",
             )
         ),
         xaxis2=dict(
@@ -226,9 +235,10 @@ def generate_heatmap_plot(inputs):
                 domain=[MAP_2_LEFT_BOUND, MAP_2_RIGHT_BOUND],
                 anchor="y2",
                 tickmode="array",
-                tickvals=[0.5],  # Set new label at the 0.5 tick value
+                tickvals=[0.05],  # Set new label at the 0.5 tick value
                 ticktext=["Recur."],  # New label
                 visible=True,
+                side="top",
             )
         ),
         yaxis1=dict(
