@@ -5,7 +5,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from scipy.spatial.distance import cosine
+from numpy import dot
+from numpy.linalg import norm
 
 from hcc_dashboard.settings import DATA_PATH  # pylint: disable=import-error
 
@@ -41,27 +42,50 @@ COLS_ORDER = [
 ] + COLS_TO_DROP
 
 MAPPINGS = {
-    "Satellite": {0: "No", 1: "Yes"},
-    "IHD": {0: "No", 1: "Yes"},
-    "DM": {0: "No", 1: "Yes"},
-    "LVI": {0: "No", 1: "Yes"},
-    "PriorTACE": {0: "No", 1: "Yes"},
-    "Cirrhosis": {0: "No", 1: "Yes"},
+    "Satellite": {0: "Yes", 1: "No"},
+    "IHD": {0: "Yes", 1: "No"},
+    "DM": {0: "Yes", 1: "No"},
+    "LVI": {0: "Yes", 1: "No"},
+    "PriorTACE": {0: "Yes", 1: "No"},
+    "Cirrhosis": {0: "Yes", 1: "No"},
     "Age": {0: "=>65", 1: "<65"},
     "Ethnicity": {0: "Asian", 1: "Caucasian", 2: "Others"},
     "eGFR": {0: ">=90", 1: "<90"},
     "Size": {0: ">=5", 1: "<5"},
     "LiverDisease": {0: "NAFLD", 1: "HepB", 2: "HepC", 3: "Alcohol", 4: "Others"},
     "No_Lesions": {0: ">1", 1: "<=1"},
-    "Bilirubin": {0: "<=20", 1: ">20"},
+    "Bilirubin": {0: ">20", 1: "<=20"},
     "Albumin": {0: ">=35", 1: "<35"},
     "HPVG": {0: ">5", 1: "<=5"},
     "AFP": {0: ">100", 1: "[8-100]", 2: "<=8"},
-    "ALT": {0: "<50", 1: "<=50"},
+    "ALT": {0: ">50", 1: "<=50"},
     "INR": {0: ">1.1", 1: "<=1.1"},
     "Sex": {0: "Male", 1: "Female"},
-    "BMI": {0: ">=25", 1: "<=25"},
+    "BMI": {0: ">=25", 1: "<25"},
 }
+
+TABLE_COLS_ORDER = [
+    "Age",
+    "Ethnicity",
+    "Sex",
+    "BMI",
+    "eGFR",
+    "IHD",
+    "DM",
+    "LVI",
+    "PriorTACE",
+    "Satellite",
+    "Size",
+    "LiverDisease",
+    "No_Lesions",
+    "Cirrhosis",
+    "Bilirubin",
+    "Albumin",
+    "HPVG",
+    "AFP",
+    "ALT",
+    "INR",
+]
 
 TABLE_RIGHT_BOUND = 0.898
 MAP_1_LEFT_BOUND = 0.9
@@ -101,13 +125,13 @@ def generate_cosine_sim(inputs, n):  # pylint: disable=invalid-name
         pd.DataFrame: dataframe of the top N similarity scores
     """
 
-    df = (  # pylint: disable=invalid-name
-        pd.read_csv(f"{DATA_PATH}/training_data.csv").drop(COLS_TO_DROP, axis=1).T
-    )
+    inputs = pd.Series(inputs).astype(float)
+    df = pd.read_csv(f"{DATA_PATH}/training_data.csv")  # pylint: disable=invalid-name
+    df = df[COLS_ORDER].drop(COLS_TO_DROP, axis=1).T  # pylint: disable=invalid-name
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
     for col in df.columns:
-        cos_sim = cosine(inputs, df[col])
+        cos_sim = dot(inputs, df[col]) / (norm(inputs) * norm(df[col]))
         df_temp = pd.DataFrame([col, cos_sim]).T
         df_temp.columns = ["patient_id", "cosine_sim"]
         df_cos_sim = pd.concat([df_cos_sim, df_temp])
@@ -189,6 +213,7 @@ def generate_heatmap_plot(inputs):
             MAPPINGS[col]
         )  # pylint: disable=consider-iterating-dictionary
 
+    df_1 = df_1[TABLE_COLS_ORDER]
     fig = make_subplots(rows=1, cols=3)
     trace_1 = go.Table(
         header=dict(
@@ -207,6 +232,7 @@ def generate_heatmap_plot(inputs):
         df_to_plotly(df_2),
         xaxis="x1",
         yaxis="y1",
+        hovertemplate="<b>%{z:.3f}</b><br><extra></extra>",
     )
 
     trace_3 = go.Heatmap(
@@ -217,6 +243,8 @@ def generate_heatmap_plot(inputs):
         showscale=False,
         text=df_4["label"].astype(str),
         texttemplate="%{text}",
+        hovertext=[],
+        hoverinfo="text",
         xgap=1,
         ygap=1,
     )
