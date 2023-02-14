@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-ti8#e&6+-0j15svm9j6w3c3xj=1=8w2mt3eaq1llf7)%&ih)n7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["vafaeelab.pythonanywhere.com"]
 
-DATA_PATH = "data" if "DATA_PATH" in os.environ else "../data"
+# DATA_PATH = "data" if "DATA_PATH" in os.environ else "../data"
+DATA_PATH = "data" if "DATA_PATH" in os.environ else "/home/vafaeelab/HCC-Recurrence-Dashboard/data"
 
 # Application definition
 
@@ -125,9 +126,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+STATIC_ROOT = os.path.join("/home/vafaeelab/HCC-Recurrence-Dashboard/hcc_dashboard", "static")
+

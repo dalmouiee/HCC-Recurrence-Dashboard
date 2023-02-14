@@ -54,7 +54,8 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Img(
-                    src="../static/website-img.gif",
+                    # src="../static/website-img.gif",
+                    src="/static/website-img.gif",
                 ),
             ],
             style={"padding-left": "20%"},
