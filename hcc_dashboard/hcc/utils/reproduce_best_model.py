@@ -25,22 +25,6 @@ mystery_weights_32 = np.array(
         0.0,
         0.0,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
     ]
 )
 
@@ -61,17 +45,17 @@ def create_model_arch():
     model = tf.keras.Sequential()
 
     model.add(tf.keras.Input(shape=(20,)))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
-    model.add(tf.keras.layers.Dense(32, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
+    model.add(tf.keras.layers.Dense(16, activation=tf.nn.tanh))
     model.add(tf.keras.layers.Dense(2, activation=tf.nn.sigmoid))
 
     return model

@@ -13,5 +13,5 @@ class InferTestCase(TestCase):
         """Function to test model inference callback with example patient"""
         n_clicks = 1
         output = infer_model(n_clicks, *TEST_PATIENT_INPUT)
-        assert output[0] == "13.34%"
-        assert output[1] == "86.66%"
+        assert output[0] == "1.06%"
+        assert output[1] == "98.94%"

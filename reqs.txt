@@ -4,6 +4,7 @@ cachetools==5.2.1
 certifi==2022.12.7
 charset-normalizer==3.0.1
 flatbuffers==23.1.4
+dash==2.09
 django-plotly-dash==2.1.3
 django-bootstrap4
 dpd_static_support
