@@ -16,6 +16,10 @@ COLS_TO_DROP = [
     "Hypertension",
     "Recurrence",
     "DaysToRecurrence",
+    "Hospital",
+    "MRN",
+    "DOB",
+    "ViralVs0nviral",
 ]
 
 COLS_ORDER = [
@@ -49,7 +53,7 @@ MAPPINGS = {
     "PriorTACE": {0: "Yes", 1: "No"},
     "Cirrhosis": {0: "Yes", 1: "No"},
     "Age": {0: "=>65", 1: "<65"},
-    "Ethnicity": {0: "Asian", 1: "Caucasian", 2: "Others"},
+    "Ethnicity": {0: "Australian", 1: "Asian", 2: "African", 3: "European", 4: "Other"},
     "eGFR": {0: ">=90", 1: "<90"},
     "Size": {0: ">=5", 1: "<5"},
     "LiverDisease": {0: "NAFLD", 1: "HepB", 2: "HepC", 3: "Alcohol", 4: "Others"},
@@ -126,7 +130,7 @@ def generate_cosine_sim(inputs, n):  # pylint: disable=invalid-name
     """
 
     inputs = pd.Series(inputs).astype(float)
-    df = pd.read_csv(f"{DATA_PATH}/training_data.csv")  # pylint: disable=invalid-name
+    df = pd.read_csv(f"{DATA_PATH}/new_training_data.csv")  # pylint: disable=invalid-name
     df = df[COLS_ORDER].drop(COLS_TO_DROP, axis=1).T  # pylint: disable=invalid-name
     df_cos_sim = pd.DataFrame(columns=["patient_id", "cosine_sim"])
 
@@ -177,7 +181,7 @@ def generate_heatmap_plot(inputs):
     Returns:
         dcc.Figure: the figure to be displayed on the dashboard
     """
-    df = pd.read_csv(f"{DATA_PATH}/training_data.csv")  # pylint: disable=invalid-name
+    df = pd.read_csv(f"{DATA_PATH}/new_training_data.csv")  # pylint: disable=invalid-name
 
     df = df.loc[:, COLS_ORDER]  # pylint: disable=invalid-name
     df_cos_sim = generate_cosine_sim(inputs, 20)

@@ -44,9 +44,11 @@ filter_card = html.Div(
                                         dbc.Label("Ethnicity"),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Asian", "value": 0},
-                                                {"label": "Caucasian", "value": 1},
-                                                {"label": "Others", "value": 2},
+                                                {"label": "Australian", "value": 0},
+                                                {"label": "Asian", "value": 1},
+                                                {"label": "African", "value": 2},
+                                                {"label": "European", "value": 3},
+                                                {"label": "Other", "value": 4},
                                             ],
                                             value=1,
                                             id="radioitems-ethnicity-input",
